@@ -8,13 +8,37 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignInImport } from './routes/sign-in'
+import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
 
+// Create Virtual Routes
+
+const ProtectedDashboardIndexLazyImport = createFileRoute(
+  '/_protected/dashboard/',
+)()
+const ProtectedDashboardChatLazyImport = createFileRoute(
+  '/_protected/dashboard/chat',
+)()
+
 // Create/Update Routes
+
+const SignInRoute = SignInImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProtectedRoute = ProtectedImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -28,6 +52,25 @@ const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProtectedDashboardIndexLazyRoute =
+  ProtectedDashboardIndexLazyImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/dashboard/index.lazy').then((d) => d.Route),
+  )
+
+const ProtectedDashboardChatLazyRoute = ProtectedDashboardChatLazyImport.update(
+  {
+    id: '/dashboard/chat',
+    path: '/dashboard/chat',
+    getParentRoute: () => ProtectedRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/_protected/dashboard/chat.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -39,6 +82,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedImport
+      parentRoute: typeof rootRoute
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInImport
+      parentRoute: typeof rootRoute
+    }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
       path: '/demo/tanstack-query'
@@ -46,43 +103,106 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryImport
       parentRoute: typeof rootRoute
     }
+    '/_protected/dashboard/chat': {
+      id: '/_protected/dashboard/chat'
+      path: '/dashboard/chat'
+      fullPath: '/dashboard/chat'
+      preLoaderRoute: typeof ProtectedDashboardChatLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/dashboard/': {
+      id: '/_protected/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardIndexLazyImport
+      parentRoute: typeof ProtectedImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface ProtectedRouteChildren {
+  ProtectedDashboardChatLazyRoute: typeof ProtectedDashboardChatLazyRoute
+  ProtectedDashboardIndexLazyRoute: typeof ProtectedDashboardIndexLazyRoute
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardChatLazyRoute: ProtectedDashboardChatLazyRoute,
+  ProtectedDashboardIndexLazyRoute: ProtectedDashboardIndexLazyRoute,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof ProtectedRouteWithChildren
+  '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/dashboard': typeof ProtectedDashboardIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof ProtectedRouteWithChildren
+  '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/dashboard': typeof ProtectedDashboardIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_protected': typeof ProtectedRouteWithChildren
+  '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/_protected/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/_protected/dashboard/': typeof ProtectedDashboardIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | ''
+    | '/sign-in'
+    | '/demo/tanstack-query'
+    | '/dashboard/chat'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | ''
+    | '/sign-in'
+    | '/demo/tanstack-query'
+    | '/dashboard/chat'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_protected'
+    | '/sign-in'
+    | '/demo/tanstack-query'
+    | '/_protected/dashboard/chat'
+    | '/_protected/dashboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProtectedRoute: typeof ProtectedRouteWithChildren
+  SignInRoute: typeof SignInRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProtectedRoute: ProtectedRouteWithChildren,
+  SignInRoute: SignInRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 
@@ -97,14 +217,34 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_protected",
+        "/sign-in",
         "/demo/tanstack-query"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_protected": {
+      "filePath": "_protected.tsx",
+      "children": [
+        "/_protected/dashboard/chat",
+        "/_protected/dashboard/"
+      ]
+    },
+    "/sign-in": {
+      "filePath": "sign-in.tsx"
+    },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
+    },
+    "/_protected/dashboard/chat": {
+      "filePath": "_protected/dashboard/chat.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/dashboard/": {
+      "filePath": "_protected/dashboard/index.lazy.tsx",
+      "parent": "/_protected"
     }
   }
 }
