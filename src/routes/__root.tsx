@@ -1,48 +1,3 @@
-// import { Outlet, createRootRouteWithContext, redirect } from '@tanstack/react-router'
-// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-//
-// import Header from '../components/header'
-//
-// import TanstackQueryLayout from '../integrations/tanstack-query/layout'
-//
-// import type { QueryClient } from '@tanstack/react-query'
-//
-// interface MyRouterContext {
-//   queryClient: QueryClient
-// }
-//
-// export const Route = createRootRouteWithContext<MyRouterContext>()({
-//   beforeLoad: async ({ context, location }) => {
-//     console.log(location.href)
-//     // if (!context.auth.isAuthenticated) {
-//     //   console.log(context)
-//     //   throw redirect({
-//     //     to: "/sign-in",
-//     //     search: {
-//     //       app_redirect: location.href,
-//     //     },
-//     //   });
-//     // }
-//     //
-//     // if (context.auth.isAuthenticated && location.searchStr !== "") {
-//     //   throw redirect({
-//     //     to: location.search.app_redirect,
-//     //   });
-//     // }
-//   },
-//   component: () => (
-//     <>
-//       <Header />
-//
-//       <Outlet />
-//       <TanStackRouterDevtools />
-//
-//       <TanstackQueryLayout />
-//     </>
-//   ),
-// })
-
-
 import {
   createRootRouteWithContext,
   Link,
@@ -55,41 +10,12 @@ import {useAuthContext} from "@/lib/auth/use-auth-context";
 import TanstackQueryLayout from '../integrations/tanstack-query/layout'
 
 import type { QueryClient } from '@tanstack/react-query'
-import Header from "@/components/header";
+import { Header } from "@/components/ui/header";
+// import Header from "@/components/header";
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
-
-// const Header = () => {
-//   const { isAuthenticated, logout } = useAuthContext();
-//   return (
-//     <div className="p-2 flex gap-2">
-//       {isAuthenticated ? (
-//         <>
-//           <Link to="/" className="[&.active]:font-bold">
-//             Home
-//           </Link>{" "}
-//           <Link to="/dashboard" className="[&.active]:font-bold">
-//             Dashboard
-//           </Link>{" "}
-//           <Link to="/about" className="[&.active]:font-bold">
-//             About
-//           </Link>{" "}
-//           <a href="/" className="[&.active]:font-bold" onClick={logout}>
-//             Logout
-//           </a>
-//         </>
-//       ) : (
-//         <>
-//           <Link href="/auth" className="[&.active]:font-bold">
-//             Log In
-//           </Link>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
 
 const AnonBanner = () => {
   return (
@@ -124,7 +50,6 @@ const RootComponent = () => {
 
 export const Route = createRootRouteWithContext()({
   beforeLoad: async ({ context, location }) => {
-    console.log(context)
     const isDashboardRoute = location.pathname.startsWith('/dashboard')
     if (!context.auth.isAuthenticated && isDashboardRoute) {
       throw redirect({

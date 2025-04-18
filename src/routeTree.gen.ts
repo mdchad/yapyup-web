@@ -26,6 +26,12 @@ const ProtectedDashboardIndexLazyImport = createFileRoute(
 const ProtectedDashboardChatLazyImport = createFileRoute(
   '/_protected/dashboard/chat',
 )()
+const ProtectedDashboardAudioLazyImport = createFileRoute(
+  '/_protected/dashboard/audio',
+)()
+const ProtectedDashboardAccountLazyImport = createFileRoute(
+  '/_protected/dashboard/account',
+)()
 
 // Create/Update Routes
 
@@ -71,6 +77,24 @@ const ProtectedDashboardChatLazyRoute = ProtectedDashboardChatLazyImport.update(
   import('./routes/_protected/dashboard/chat.lazy').then((d) => d.Route),
 )
 
+const ProtectedDashboardAudioLazyRoute =
+  ProtectedDashboardAudioLazyImport.update({
+    id: '/dashboard/audio',
+    path: '/dashboard/audio',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/dashboard/audio.lazy').then((d) => d.Route),
+  )
+
+const ProtectedDashboardAccountLazyRoute =
+  ProtectedDashboardAccountLazyImport.update({
+    id: '/dashboard/account',
+    path: '/dashboard/account',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/dashboard/account.lazy').then((d) => d.Route),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -103,6 +127,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryImport
       parentRoute: typeof rootRoute
     }
+    '/_protected/dashboard/account': {
+      id: '/_protected/dashboard/account'
+      path: '/dashboard/account'
+      fullPath: '/dashboard/account'
+      preLoaderRoute: typeof ProtectedDashboardAccountLazyImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/dashboard/audio': {
+      id: '/_protected/dashboard/audio'
+      path: '/dashboard/audio'
+      fullPath: '/dashboard/audio'
+      preLoaderRoute: typeof ProtectedDashboardAudioLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/dashboard/chat': {
       id: '/_protected/dashboard/chat'
       path: '/dashboard/chat'
@@ -123,11 +161,15 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface ProtectedRouteChildren {
+  ProtectedDashboardAccountLazyRoute: typeof ProtectedDashboardAccountLazyRoute
+  ProtectedDashboardAudioLazyRoute: typeof ProtectedDashboardAudioLazyRoute
   ProtectedDashboardChatLazyRoute: typeof ProtectedDashboardChatLazyRoute
   ProtectedDashboardIndexLazyRoute: typeof ProtectedDashboardIndexLazyRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardAccountLazyRoute: ProtectedDashboardAccountLazyRoute,
+  ProtectedDashboardAudioLazyRoute: ProtectedDashboardAudioLazyRoute,
   ProtectedDashboardChatLazyRoute: ProtectedDashboardChatLazyRoute,
   ProtectedDashboardIndexLazyRoute: ProtectedDashboardIndexLazyRoute,
 }
@@ -141,6 +183,8 @@ export interface FileRoutesByFullPath {
   '': typeof ProtectedRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
+  '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/dashboard': typeof ProtectedDashboardIndexLazyRoute
 }
@@ -150,6 +194,8 @@ export interface FileRoutesByTo {
   '': typeof ProtectedRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
+  '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/dashboard': typeof ProtectedDashboardIndexLazyRoute
 }
@@ -160,6 +206,8 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/_protected/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
+  '/_protected/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/_protected/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexLazyRoute
 }
@@ -171,6 +219,8 @@ export interface FileRouteTypes {
     | ''
     | '/sign-in'
     | '/demo/tanstack-query'
+    | '/dashboard/account'
+    | '/dashboard/audio'
     | '/dashboard/chat'
     | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
@@ -179,6 +229,8 @@ export interface FileRouteTypes {
     | ''
     | '/sign-in'
     | '/demo/tanstack-query'
+    | '/dashboard/account'
+    | '/dashboard/audio'
     | '/dashboard/chat'
     | '/dashboard'
   id:
@@ -187,6 +239,8 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/sign-in'
     | '/demo/tanstack-query'
+    | '/_protected/dashboard/account'
+    | '/_protected/dashboard/audio'
     | '/_protected/dashboard/chat'
     | '/_protected/dashboard/'
   fileRoutesById: FileRoutesById
@@ -228,6 +282,8 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
+        "/_protected/dashboard/account",
+        "/_protected/dashboard/audio",
         "/_protected/dashboard/chat",
         "/_protected/dashboard/"
       ]
@@ -237,6 +293,14 @@ export const routeTree = rootRoute
     },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
+    },
+    "/_protected/dashboard/account": {
+      "filePath": "_protected/dashboard/account.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/dashboard/audio": {
+      "filePath": "_protected/dashboard/audio.lazy.tsx",
+      "parent": "/_protected"
     },
     "/_protected/dashboard/chat": {
       "filePath": "_protected/dashboard/chat.lazy.tsx",

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import {createFileRoute, useRouterState} from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { LoginForm } from "@/components/login-form"
 
@@ -7,10 +7,13 @@ export const Route = createFileRoute('/sign-in')({
 })
 
 function SignIn() {
+  const state = useRouterState()
+  console.log(state)
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-6">
-        <LoginForm />
+        <LoginForm redirect={state?.location?.search?.app_redirect}/>
       </div>
     </div>
   )

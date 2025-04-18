@@ -15,7 +15,9 @@ function RouteComponent() {
     append,
     isLoading,
     stop,
-  } = useChat()
+  } = useChat({
+    api: "/api/chat"
+})
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
