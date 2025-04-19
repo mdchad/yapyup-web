@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { useChat } from "ai/react"
 import { Chat } from "@/components/ui/chat"
+import { Excalidraw } from "@excalidraw/excalidraw";
 
 export const Route = createLazyFileRoute('/_protected/dashboard/chat')({
   component: RouteComponent,
