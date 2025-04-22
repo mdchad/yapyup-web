@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useEffect } from "react"
+import { forwardRef, useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { FileIcon, X } from "lucide-react"
 
@@ -9,7 +7,7 @@ interface FilePreviewProps {
   onRemove?: () => void
 }
 
-export const FilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
+export const FilePreview = forwardRef<HTMLDivElement, FilePreviewProps>(
   (props, ref) => {
     if (props.file.type.startsWith("image/")) {
       return <ImageFilePreview {...props} ref={ref} />
@@ -28,7 +26,7 @@ export const FilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
 )
 FilePreview.displayName = "FilePreview"
 
-const ImageFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
+const ImageFilePreview = forwardRef<HTMLDivElement, FilePreviewProps>(
   ({ file, onRemove }, ref) => {
     return (
       <motion.div
@@ -67,9 +65,9 @@ const ImageFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
 )
 ImageFilePreview.displayName = "ImageFilePreview"
 
-const TextFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
+const TextFilePreview = forwardRef<HTMLDivElement, FilePreviewProps>(
   ({ file, onRemove }, ref) => {
-    const [preview, setPreview] = React.useState<string>("")
+    const [preview, setPreview] = useState<string>("")
 
     useEffect(() => {
       const reader = new FileReader()
@@ -116,7 +114,7 @@ const TextFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
 )
 TextFilePreview.displayName = "TextFilePreview"
 
-const GenericFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
+const GenericFilePreview = forwardRef<HTMLDivElement, FilePreviewProps>(
   ({ file, onRemove }, ref) => {
     return (
       <motion.div

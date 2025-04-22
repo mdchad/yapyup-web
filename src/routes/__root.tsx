@@ -11,6 +11,7 @@ import TanstackQueryLayout from '../integrations/tanstack-query/layout'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Header } from "@/components/ui/header";
+import DashboardHeader from "@/components/ui/dashboard-header";
 // import Header from "@/components/header";
 
 interface MyRouterContext {
@@ -37,14 +38,15 @@ const RootComponent = () => {
   const { isAnonymous, isAuthenticated } = useAuthContext();
 
   return (
-    <>
-      <Header isAuthenticated={isAuthenticated}/>
+    <div className="h-screen flex flex-col">
+      <DashboardHeader />
+      {/*<Header isAuthenticated={isAuthenticated}/>*/}
 
       <Outlet />
       <TanStackRouterDevtools />
 
       <TanstackQueryLayout />
-    </>
+    </div>
   );
 };
 
@@ -66,5 +68,5 @@ export const Route = createRootRouteWithContext()({
       });
     }
   },
-  component: RootComponent,
+  component: RootComponent
 });

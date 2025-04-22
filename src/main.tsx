@@ -67,7 +67,7 @@ createRoot(document.getElementById("app")!).render(
   <TanstackQuery.Provider>
     <AuthProvider>
       <App />
-    </AuthProvider>,
+    </AuthProvider>
   </TanstackQuery.Provider>
   // </StrictMode>,
 );
