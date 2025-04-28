@@ -15,6 +15,7 @@ import { CopyButton } from "@/components/ui/copy-button"
 import { MessageInput } from "@/components/ui/message-input"
 import { MessageList } from "@/components/ui/message-list"
 import { PromptSuggestions } from "@/components/ui/prompt-suggestions"
+import {DiagramButton} from "@/components/ui/diagram-button";
 
 interface ChatPropsBase {
   handleSubmit: (
@@ -180,17 +181,23 @@ export function Chat({
           </Button>
         </>
       ) : (
-        <CopyButton
-          content={message.content}
-          copyMessage="Copied response to clipboard!"
-        />
+        <>
+          <DiagramButton
+            content={message.content}
+            copyMessage="Copied response to clipboard!"
+          />
+          <CopyButton
+            content={message.content}
+            copyMessage="Copied response to clipboard!"
+          />
+        </>
       ),
     }),
     [onRateResponse]
   )
 
   return (
-    <ChatContainer className={className}>
+    <ChatContainer className={cn("flex flex-col h-full", className)}>
       {isEmpty && append && suggestions ? (
         <PromptSuggestions
           label="Try these prompts ✨"
@@ -207,7 +214,9 @@ export function Chat({
             messageOptions={messageOptions}
           />
         </ChatMessages>
-      ) : null}
+      ) : (
+        <div className="flex-1"></div>
+      )}
 
       <ChatForm
         className="mt-auto"
@@ -248,18 +257,18 @@ export function ChatMessages({
 
   return (
     <div
-      className="grid grid-cols-1 overflow-y-auto pb-4"
+      className="flex-1"
       ref={containerRef}
       onScroll={handleScroll}
       onTouchStart={handleTouchStart}
     >
-      <div className="max-w-full [grid-column:1/1] [grid-row:1/1]">
+      <div className="h-full">
         {children}
       </div>
 
       {!shouldAutoScroll && (
-        <div className="pointer-events-none flex flex-1 items-end justify-end [grid-column:1/1] [grid-row:1/1]">
-          <div className="sticky bottom-0 left-0 flex w-full justify-end">
+        <div className="pointer-events-none flex flex-1 items-end justify-end">
+          <div className="sticky bottom-0 left-0 flex w-full justify-end p-4">
             <Button
               onClick={scrollToBottom}
               className="pointer-events-auto h-8 w-8 rounded-full ease-in-out animate-in fade-in-0 slide-in-from-bottom-1"
@@ -282,7 +291,7 @@ export const ChatContainer = forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("grid max-h-full w-full grid-rows-[1fr_auto]", className)}
+      className={cn("flex h-full flex-col", className)}
       {...props}
     />
   )
@@ -318,7 +327,7 @@ export const ChatForm = forwardRef<HTMLFormElement, ChatFormProps>(
     }
 
     return (
-      <form ref={ref} onSubmit={onSubmit} className={className}>
+      <form ref={ref} onSubmit={onSubmit} className={cn("sticky bottom-0 bg-background p-4", className)}>
         {children({ files, setFiles })}
       </form>
     )

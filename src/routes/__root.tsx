@@ -2,7 +2,7 @@ import {
   createRootRouteWithContext,
   Link,
   Outlet,
-  redirect,
+  redirect, useLocation, useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import {useAuthContext} from "@/lib/auth/use-auth-context";
@@ -11,6 +11,7 @@ import TanstackQueryLayout from '../integrations/tanstack-query/layout'
 
 import type { QueryClient } from '@tanstack/react-query'
 import { Header } from "@/components/ui/header";
+import DashboardHeader from "@/components/ui/dashboard-header";
 // import Header from "@/components/header";
 
 interface MyRouterContext {
@@ -35,16 +36,22 @@ const AnonBanner = () => {
 
 const RootComponent = () => {
   const { isAnonymous, isAuthenticated } = useAuthContext();
+  const location = useLocation()
+  const isDashboardRoute = location.pathname.startsWith('/dashboard')
 
   return (
-    <>
-      <Header isAuthenticated={isAuthenticated}/>
+    <div className="h-screen flex flex-col">
+      {
+        isDashboardRoute ? <DashboardHeader /> : <Header />
+      }
+      {/*<DashboardHeader />*/}
+      {/*<Header isAuthenticated={isAuthenticated}/>*/}
 
       <Outlet />
       <TanStackRouterDevtools />
 
       <TanstackQueryLayout />
-    </>
+    </div>
   );
 };
 
@@ -66,5 +73,5 @@ export const Route = createRootRouteWithContext()({
       });
     }
   },
-  component: RootComponent,
+  component: RootComponent
 });

@@ -1,5 +1,4 @@
-
-import { Check, Copy } from "lucide-react"
+import { Check, Copy, SplinePointer } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
@@ -10,7 +9,7 @@ type CopyButtonProps = {
   copyMessage?: string
 }
 
-export function CopyButton({ content, copyMessage }: CopyButtonProps) {
+export function DiagramButton({ content, copyMessage }: CopyButtonProps) {
   const { isCopied, handleCopy } = useCopyToClipboard({
     text: content,
     copyMessage,
@@ -32,7 +31,7 @@ export function CopyButton({ content, copyMessage }: CopyButtonProps) {
           )}
         />
       </div>
-      <Copy
+      <SplinePointer
         className={cn(
           "h-4 w-4 transition-transform ease-in-out",
           isCopied ? "scale-0" : "scale-100"
