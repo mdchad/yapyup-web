@@ -2,7 +2,7 @@ import {
   createRootRouteWithContext,
   Link,
   Outlet,
-  redirect,
+  redirect, useLocation, useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import {useAuthContext} from "@/lib/auth/use-auth-context";
@@ -36,10 +36,15 @@ const AnonBanner = () => {
 
 const RootComponent = () => {
   const { isAnonymous, isAuthenticated } = useAuthContext();
+  const location = useLocation()
+  const isDashboardRoute = location.pathname.startsWith('/dashboard')
 
   return (
     <div className="h-screen flex flex-col">
-      <DashboardHeader />
+      {
+        isDashboardRoute ? <DashboardHeader /> : <Header />
+      }
+      {/*<DashboardHeader />*/}
       {/*<Header isAuthenticated={isAuthenticated}/>*/}
 
       <Outlet />

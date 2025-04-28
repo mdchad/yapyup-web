@@ -213,33 +213,33 @@ export function MessageInput({
               : omit(props, ["allowAttachments"]))}
           />
 
-          {/*{props.allowAttachments && (*/}
-          {/*  <div className="absolute inset-x-3 bottom-0 z-20 overflow-x-scroll py-3">*/}
-          {/*    <div className="flex space-x-3">*/}
-          {/*      <AnimatePresence mode="popLayout">*/}
-          {/*        {props.files?.map((file) => {*/}
-          {/*          return (*/}
-          {/*            <FilePreview*/}
-          {/*              key={file.name + String(file.lastModified)}*/}
-          {/*              file={file}*/}
-          {/*              onRemove={() => {*/}
-          {/*                props.setFiles((files) => {*/}
-          {/*                  if (!files) return null*/}
+          {props.allowAttachments && (
+            <div className="absolute inset-x-3 bottom-0 z-20 overflow-x-scroll py-3">
+              <div className="flex space-x-3">
+                <AnimatePresence mode="popLayout">
+                  {props.files?.map((file) => {
+                    return (
+                      <FilePreview
+                        key={file.name + String(file.lastModified)}
+                        file={file}
+                        onRemove={() => {
+                          props.setFiles((files) => {
+                            if (!files) return null
 
-          {/*                  const filtered = Array.from(files).filter(*/}
-          {/*                    (f) => f !== file*/}
-          {/*                  )*/}
-          {/*                  if (filtered.length === 0) return null*/}
-          {/*                  return filtered*/}
-          {/*                })*/}
-          {/*              }}*/}
-          {/*            />*/}
-          {/*          )*/}
-          {/*        })}*/}
-          {/*      </AnimatePresence>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*)}*/}
+                            const filtered = Array.from(files).filter(
+                              (f) => f !== file
+                            )
+                            if (filtered.length === 0) return null
+                            return filtered
+                          })
+                        }}
+                      />
+                    )
+                  })}
+                </AnimatePresence>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
