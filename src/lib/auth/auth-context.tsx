@@ -3,6 +3,7 @@ import { createContext } from 'react'
 type AuthenticatedUser = {
   id: string;
   email?: string;
+  token: string;
   displayName: string;
 };
 

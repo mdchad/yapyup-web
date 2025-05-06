@@ -6,6 +6,7 @@ import {Dropzone, DropzoneContent, DropzoneEmptyState} from "@/components/ui/dro
 import {useEffect, useRef, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {useCompletion} from "@ai-sdk/react";
+import {useAuthContext} from "@/lib/auth/use-auth-context";
 
 export const Route = createLazyFileRoute('/_protected/dashboard/transcribe')({
   component: RouteComponent,
@@ -16,6 +17,7 @@ function RouteComponent() {
   const [transcriptData, setTranscriptData] = useState(null);
   const [audioUrl, setAudioUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuthContext();
 
   const handleDrop = (files: File[]) => {
     const file = files[0];
@@ -27,7 +29,7 @@ function RouteComponent() {
     setAudioUrl(objectUrl);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitUpload = async () => {
     if (!files || files.length === 0) {
       console.error("No files selected");
       return;
@@ -39,7 +41,7 @@ function RouteComponent() {
         formData.append("file", file);
       });
 
-      const response = await fetch("/api/transcribe", {
+      const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -48,8 +50,54 @@ function RouteComponent() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      setTranscriptData(data);
+      const result  = await response.json();
+      console.log(result)
+
+      // Handle the transcription result here
+    } catch (error) {
+      console.error("Error transcribing audio:", error);
+    } finally {
+      setIsLoading(false)
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch("/api/process-audio", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result  = await response.json();
+      console.log(result)
+
+      // Handle the transcription result here
+    } catch (error) {
+      console.error("Error transcribing audio:", error);
+    } finally {
+      setIsLoading(false)
+    }
+  };
+
+  const handleTry = async () => {
+    const token = user?.token
+    try {
+      const response = await fetch("/api/try", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result  = await response.json();
+      console.log(result)
 
       // Handle the transcription result here
     } catch (error) {
@@ -63,7 +111,7 @@ function RouteComponent() {
     <div className="bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
         <Dropzone
-          maxSize={1024 * 1024 * 10}
+          maxSize={1024 * 1024 * 100}
           minSize={1024}
           maxFiles={10}
           accept={{ 'audio/mpeg': [] }}
@@ -75,7 +123,13 @@ function RouteComponent() {
           <DropzoneContent />
         </Dropzone>
         <div className="mt-6">
+          <Button onClick={handleSubmitUpload}>Upload file</Button>
+        </div>
+        <div className="mt-6">
           <Button onClick={handleSubmit}>Submit</Button>
+        </div>
+        <div className="mt-6">
+          <Button onClick={handleTry}>Try try</Button>
         </div>
       </div>
 

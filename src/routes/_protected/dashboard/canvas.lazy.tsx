@@ -74,7 +74,7 @@ function RouteComponent() {
     }
 
     // Create a prompt that asks the LLM to convert the last message to a mermaid diagram
-    const mermaidPrompt = `Based on the following content, generate a mermaid diagram that visualizes the key concepts and their relationships:
+    const mermaidPrompt = `Based on the following content, generate a mermaid diagram that visualizes the key concepts, the details and explanation, and their relationships:
     
 ${lastAiMessage.content}
 

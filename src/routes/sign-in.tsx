@@ -8,7 +8,6 @@ export const Route = createFileRoute('/sign-in')({
 
 function SignIn() {
   const state = useRouterState()
-  console.log(state)
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

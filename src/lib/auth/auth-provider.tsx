@@ -5,6 +5,7 @@ import {supabase} from "@/lib/supabase/client";
 type AuthenticatedUser = {
   id: string;
   email?: string;
+  token: string;
   displayName: string;
 };
 
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       session && {
         id: session.user.id,
         email: session.user.email,
+        token: session.access_token,
         displayName: session.user.email || "Anonymous",
       },
     );
