@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignUpImport } from './routes/sign-up'
 import { Route as SignInImport } from './routes/sign-in'
 import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as ForgotPasswordImport } from './routes/forgot-password'
@@ -42,6 +43,12 @@ const ProtectedDashboardAccountLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
+
+const SignUpRoute = SignUpImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignInRoute = SignInImport.update({
   id: '/sign-in',
@@ -174,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInImport
       parentRoute: typeof rootRoute
     }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpImport
+      parentRoute: typeof rootRoute
+    }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
       path: '/demo/tanstack-query'
@@ -256,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
@@ -271,6 +286,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
@@ -287,6 +303,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_protected/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/_protected/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
@@ -304,6 +321,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
+    | '/sign-up'
     | '/demo/tanstack-query'
     | '/dashboard/account'
     | '/dashboard/audio'
@@ -318,6 +336,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
+    | '/sign-up'
     | '/demo/tanstack-query'
     | '/dashboard/account'
     | '/dashboard/audio'
@@ -332,6 +351,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
+    | '/sign-up'
     | '/demo/tanstack-query'
     | '/_protected/dashboard/account'
     | '/_protected/dashboard/audio'
@@ -348,6 +368,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
@@ -357,6 +378,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 
@@ -375,6 +397,7 @@ export const routeTree = rootRoute
         "/forgot-password",
         "/reset-password",
         "/sign-in",
+        "/sign-up",
         "/demo/tanstack-query"
       ]
     },
@@ -400,6 +423,9 @@ export const routeTree = rootRoute
     },
     "/sign-in": {
       "filePath": "sign-in.tsx"
+    },
+    "/sign-up": {
+      "filePath": "sign-up.tsx"
     },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -10,12 +11,12 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useState } from 'react'
 
 export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
+  const [workspaceName, setWorkspaceName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -28,14 +29,23 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
       setError('Passwords do not match')
       return
     }
+    if (!workspaceName.trim()) {
+      setError('Workspace name is required')
+      return
+    }
     setIsLoading(true)
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error: signUpError, data: signUpData } = await supabase.auth.signUp({
         email,
         password,
       })
-      if (error) throw error
+      if (signUpError) throw signUpError
+      // Insert organisation after successful sign up
+      const { error: orgError } = await supabase.from('organisations').insert([
+        { name: workspaceName }
+      ])
+      if (orgError) throw orgError
       setSuccess(true)
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -101,6 +111,17 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
                     required
                     value={repeatPassword}
                     onChange={(e) => setRepeatPassword(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="workspace-name">Workspace Name</Label>
+                  <Input
+                    id="workspace-name"
+                    type="text"
+                    placeholder="Your workspace name"
+                    required
+                    value={workspaceName}
+                    onChange={(e) => setWorkspaceName(e.target.value)}
                   />
                 </div>
                 {error && <p className="text-sm text-red-500">{error}</p>}
