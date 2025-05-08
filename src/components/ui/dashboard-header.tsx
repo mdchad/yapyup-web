@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {Link} from "@tanstack/react-router";
 
 const DashboardHeader = () => {
   return (
@@ -66,10 +67,10 @@ const DashboardHeader = () => {
         {/* Right side: Main Navigation */}
         <div className="flex items-center space-x-4">
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-900">Playground</a>
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-900">Dashboard</a>
-            <a href="#" className="text-sm text-gray-700 font-medium hover:text-gray-900">Docs</a>
-            <a href="#" className="text-sm text-gray-500 hover:text-gray-900">API reference</a>
+            <Link href="#" className="text-sm text-gray-500 hover:text-gray-900">Playground</Link>
+            <Link href="/dashboard/audio" className="text-sm text-gray-500 hover:text-gray-900">Audio</Link>
+            <Link href="/dashboard/canvas" className="text-sm text-gray-700 font-medium hover:text-gray-900">Chat</Link>
+            <Link href="/dashboard/transcribe" className="text-sm text-gray-500 hover:text-gray-900">Transcribe</Link>
           </nav>
 
           <Button variant="ghost" size="icon" className="text-gray-500">
