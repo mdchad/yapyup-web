@@ -82,31 +82,6 @@ function RouteComponent() {
     }
   };
 
-  const handleTry = async () => {
-    const token = user?.token
-    try {
-      const response = await fetch("/api/try", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        method: "POST",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result  = await response.json();
-      console.log(result)
-
-      // Handle the transcription result here
-    } catch (error) {
-      console.error("Error transcribing audio:", error);
-    } finally {
-      setIsLoading(false)
-    }
-  };
-
   return (
     <div className="bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
@@ -127,9 +102,6 @@ function RouteComponent() {
         </div>
         <div className="mt-6">
           <Button onClick={handleSubmit}>Submit</Button>
-        </div>
-        <div className="mt-6">
-          <Button onClick={handleTry}>Try try</Button>
         </div>
       </div>
 

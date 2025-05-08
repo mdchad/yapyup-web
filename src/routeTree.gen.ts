@@ -14,6 +14,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignInImport } from './routes/sign-in'
+import { Route as ResetPasswordImport } from './routes/reset-password'
+import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
@@ -44,6 +46,18 @@ const ProtectedDashboardAccountLazyImport = createFileRoute(
 const SignInRoute = SignInImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResetPasswordRoute = ResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForgotPasswordRoute = ForgotPasswordImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -139,6 +153,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordImport
+      parentRoute: typeof rootRoute
+    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
@@ -225,6 +253,8 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
@@ -238,6 +268,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
@@ -252,6 +284,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sign-in': typeof SignInRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_protected/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
@@ -267,6 +301,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/forgot-password'
+    | '/reset-password'
     | '/sign-in'
     | '/demo/tanstack-query'
     | '/dashboard/account'
@@ -279,6 +315,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/forgot-password'
+    | '/reset-password'
     | '/sign-in'
     | '/demo/tanstack-query'
     | '/dashboard/account'
@@ -291,6 +329,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_protected'
+    | '/forgot-password'
+    | '/reset-password'
     | '/sign-in'
     | '/demo/tanstack-query'
     | '/_protected/dashboard/account'
@@ -305,6 +345,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SignInRoute: typeof SignInRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
@@ -312,6 +354,8 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SignInRoute: SignInRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
@@ -328,6 +372,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_protected",
+        "/forgot-password",
+        "/reset-password",
         "/sign-in",
         "/demo/tanstack-query"
       ]
@@ -345,6 +391,12 @@ export const routeTree = rootRoute
         "/_protected/dashboard/transcribe",
         "/_protected/dashboard/"
       ]
+    },
+    "/forgot-password": {
+      "filePath": "forgot-password.tsx"
+    },
+    "/reset-password": {
+      "filePath": "reset-password.tsx"
     },
     "/sign-in": {
       "filePath": "sign-in.tsx"

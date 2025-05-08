@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "vite --port 3000",
-    "build": "vite build && tsc",
+    "build": "vite build",
+    "deploy": "npm run build && wrangler deploy",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
@@ -53,6 +54,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.1.0",
     "@tanstack/eslint-config": "^0.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
@@ -64,6 +66,7 @@
     "typescript": "^5.7.2",
     "vite": "^6.1.0",
     "vitest": "^3.0.5",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "wrangler": "^4.14.2"
   }
 }

@@ -60,6 +60,7 @@ import "./styles.css";
 import {AuthProvider} from "@/lib/auth/auth-provider";
 import {App} from "@/app";
 import * as TanstackQuery from './integrations/tanstack-query/root-provider'
+import {Toaster} from "@/components/ui/sonner";
 
 
 createRoot(document.getElementById("app")!).render(
@@ -67,6 +68,7 @@ createRoot(document.getElementById("app")!).render(
   <TanstackQuery.Provider>
     <AuthProvider>
       <App />
+      <Toaster />
     </AuthProvider>
   </TanstackQuery.Provider>
   // </StrictMode>,
