@@ -59,7 +59,7 @@ export function LoginForm({ className, redirect, ...props }: React.ComponentProp
                 <Input
                   id="email"
                   type="email"
-                  autoComplete="username"
+                  autoComplete="email"
                   placeholder="m@example.com"
                   required
                   value={email}
@@ -81,6 +81,7 @@ export function LoginForm({ className, redirect, ...props }: React.ComponentProp
                   autoComplete="current-password"
                   type="password"
                   required
+                  placeholder="********"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
     );
 
+    console.log(session)
     const _isAuthenticated = !!session;
 
     setIsAuthenticated(_isAuthenticated);

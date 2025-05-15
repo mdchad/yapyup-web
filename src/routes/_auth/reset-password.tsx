@@ -1,15 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ForgotPasswordForm } from "@/components/forgot-password-form"
+import { UpdatePasswordForm } from "@/components/update-password-form"
 
-export const Route = createFileRoute('/forgot-password')({
-  component: ForgotPassword,
+export const Route = createFileRoute('/_auth/reset-password')({
+  component: ResetPassword,
 })
 
-function ForgotPassword() {
+function ResetPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-6">
-        <ForgotPasswordForm />
+        <UpdatePasswordForm />
       </div>
     </div>
   )
