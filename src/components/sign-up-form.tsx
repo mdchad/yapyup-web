@@ -14,8 +14,8 @@ import { Label } from '@/components/ui/label'
 
 export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
-  const [repeatPassword, setRepeatPassword] = useState('')
   const [workspaceName, setWorkspaceName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -25,10 +25,6 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
     e.preventDefault()
     setError(null)
 
-    if (password !== repeatPassword) {
-      setError('Passwords do not match')
-      return
-    }
     if (!workspaceName.trim()) {
       setError('Workspace name is required')
       return
@@ -79,40 +75,42 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
             <form onSubmit={handleSignUp}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="John"
+                    required
+                    autoComplete="username"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="m@example.com"
                     required
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2">
-                  <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
-                  </div>
                   <Input
                     id="password"
                     type="password"
+                    placeholder="********"
                     required
+                    autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
-                <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="repeat-password">Repeat Password</Label>
-                  </div>
-                  <Input
-                    id="repeat-password"
-                    type="password"
-                    required
-                    value={repeatPassword}
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                  />
-                </div>
+                <hr />
                 <div className="grid gap-2">
                   <Label htmlFor="workspace-name">Workspace Name</Label>
                   <Input
@@ -131,7 +129,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
               </div>
               <div className="mt-4 text-center text-sm">
                 Already have an account?{' '}
-                <a href="/login" className="underline underline-offset-4">
+                <a href="/sign-in" className="underline underline-offset-4">
                   Login
                 </a>
               </div>

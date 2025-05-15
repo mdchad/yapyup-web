@@ -13,13 +13,15 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SignUpImport } from './routes/sign-up'
-import { Route as SignInImport } from './routes/sign-in'
-import { Route as ResetPasswordImport } from './routes/reset-password'
-import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as ProtectedImport } from './routes/_protected'
 import { Route as IndexImport } from './routes/index'
 import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
+import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
+import { Route as AuthSignInImport } from './routes/_auth/sign-in'
+import { Route as AuthResetPasswordImport } from './routes/_auth/reset-password'
+import { Route as AuthForgotPasswordImport } from './routes/_auth/forgot-password'
+import { Route as ProtectedDashboardOrgOrgIdIndexImport } from './routes/_protected/dashboard/org/$orgId/index'
+import { Route as ProtectedDashboardOrgOrgIdUserUserIdImport } from './routes/_protected/dashboard/org/$orgId/user/$userId'
 
 // Create Virtual Routes
 
@@ -28,6 +30,9 @@ const ProtectedDashboardIndexLazyImport = createFileRoute(
 )()
 const ProtectedDashboardTranscribeLazyImport = createFileRoute(
   '/_protected/dashboard/transcribe',
+)()
+const ProtectedDashboardNotesLazyImport = createFileRoute(
+  '/_protected/dashboard/notes',
 )()
 const ProtectedDashboardChatLazyImport = createFileRoute(
   '/_protected/dashboard/chat',
@@ -44,30 +49,6 @@ const ProtectedDashboardAccountLazyImport = createFileRoute(
 
 // Create/Update Routes
 
-const SignUpRoute = SignUpImport.update({
-  id: '/sign-up',
-  path: '/sign-up',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SignInRoute = SignInImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ResetPasswordRoute = ResetPasswordImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ForgotPasswordRoute = ForgotPasswordImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const ProtectedRoute = ProtectedImport.update({
   id: '/_protected',
   getParentRoute: () => rootRoute,
@@ -82,6 +63,30 @@ const IndexRoute = IndexImport.update({
 const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
   id: '/demo/tanstack-query',
   path: '/demo/tanstack-query',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthSignUpRoute = AuthSignUpImport.update({
+  id: '/_auth/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthSignInRoute = AuthSignInImport.update({
+  id: '/_auth/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthResetPasswordRoute = AuthResetPasswordImport.update({
+  id: '/_auth/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  id: '/_auth/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -103,6 +108,15 @@ const ProtectedDashboardTranscribeLazyRoute =
     import('./routes/_protected/dashboard/transcribe.lazy').then(
       (d) => d.Route,
     ),
+  )
+
+const ProtectedDashboardNotesLazyRoute =
+  ProtectedDashboardNotesLazyImport.update({
+    id: '/dashboard/notes',
+    path: '/dashboard/notes',
+    getParentRoute: () => ProtectedRoute,
+  } as any).lazy(() =>
+    import('./routes/_protected/dashboard/notes.lazy').then((d) => d.Route),
   )
 
 const ProtectedDashboardChatLazyRoute = ProtectedDashboardChatLazyImport.update(
@@ -142,6 +156,20 @@ const ProtectedDashboardAccountLazyRoute =
     import('./routes/_protected/dashboard/account.lazy').then((d) => d.Route),
   )
 
+const ProtectedDashboardOrgOrgIdIndexRoute =
+  ProtectedDashboardOrgOrgIdIndexImport.update({
+    id: '/dashboard/org/$orgId/',
+    path: '/dashboard/org/$orgId/',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+
+const ProtectedDashboardOrgOrgIdUserUserIdRoute =
+  ProtectedDashboardOrgOrgIdUserUserIdImport.update({
+    id: '/dashboard/org/$orgId/user/$userId',
+    path: '/dashboard/org/$orgId/user/$userId',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -160,32 +188,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedImport
       parentRoute: typeof rootRoute
     }
-    '/forgot-password': {
-      id: '/forgot-password'
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
       path: '/forgot-password'
       fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordImport
+      preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/reset-password': {
-      id: '/reset-password'
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordImport
+      preLoaderRoute: typeof AuthResetPasswordImport
       parentRoute: typeof rootRoute
     }
-    '/sign-in': {
-      id: '/sign-in'
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInImport
+      preLoaderRoute: typeof AuthSignInImport
       parentRoute: typeof rootRoute
     }
-    '/sign-up': {
-      id: '/sign-up'
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpImport
+      preLoaderRoute: typeof AuthSignUpImport
       parentRoute: typeof rootRoute
     }
     '/demo/tanstack-query': {
@@ -223,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardChatLazyImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/dashboard/notes': {
+      id: '/_protected/dashboard/notes'
+      path: '/dashboard/notes'
+      fullPath: '/dashboard/notes'
+      preLoaderRoute: typeof ProtectedDashboardNotesLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/dashboard/transcribe': {
       id: '/_protected/dashboard/transcribe'
       path: '/dashboard/transcribe'
@@ -237,6 +272,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardIndexLazyImport
       parentRoute: typeof ProtectedImport
     }
+    '/_protected/dashboard/org/$orgId/': {
+      id: '/_protected/dashboard/org/$orgId/'
+      path: '/dashboard/org/$orgId'
+      fullPath: '/dashboard/org/$orgId'
+      preLoaderRoute: typeof ProtectedDashboardOrgOrgIdIndexImport
+      parentRoute: typeof ProtectedImport
+    }
+    '/_protected/dashboard/org/$orgId/user/$userId': {
+      id: '/_protected/dashboard/org/$orgId/user/$userId'
+      path: '/dashboard/org/$orgId/user/$userId'
+      fullPath: '/dashboard/org/$orgId/user/$userId'
+      preLoaderRoute: typeof ProtectedDashboardOrgOrgIdUserUserIdImport
+      parentRoute: typeof ProtectedImport
+    }
   }
 }
 
@@ -247,8 +296,11 @@ interface ProtectedRouteChildren {
   ProtectedDashboardAudioLazyRoute: typeof ProtectedDashboardAudioLazyRoute
   ProtectedDashboardCanvasLazyRoute: typeof ProtectedDashboardCanvasLazyRoute
   ProtectedDashboardChatLazyRoute: typeof ProtectedDashboardChatLazyRoute
+  ProtectedDashboardNotesLazyRoute: typeof ProtectedDashboardNotesLazyRoute
   ProtectedDashboardTranscribeLazyRoute: typeof ProtectedDashboardTranscribeLazyRoute
   ProtectedDashboardIndexLazyRoute: typeof ProtectedDashboardIndexLazyRoute
+  ProtectedDashboardOrgOrgIdIndexRoute: typeof ProtectedDashboardOrgOrgIdIndexRoute
+  ProtectedDashboardOrgOrgIdUserUserIdRoute: typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
@@ -256,8 +308,12 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardAudioLazyRoute: ProtectedDashboardAudioLazyRoute,
   ProtectedDashboardCanvasLazyRoute: ProtectedDashboardCanvasLazyRoute,
   ProtectedDashboardChatLazyRoute: ProtectedDashboardChatLazyRoute,
+  ProtectedDashboardNotesLazyRoute: ProtectedDashboardNotesLazyRoute,
   ProtectedDashboardTranscribeLazyRoute: ProtectedDashboardTranscribeLazyRoute,
   ProtectedDashboardIndexLazyRoute: ProtectedDashboardIndexLazyRoute,
+  ProtectedDashboardOrgOrgIdIndexRoute: ProtectedDashboardOrgOrgIdIndexRoute,
+  ProtectedDashboardOrgOrgIdUserUserIdRoute:
+    ProtectedDashboardOrgOrgIdUserUserIdRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -267,50 +323,59 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
   '/dashboard': typeof ProtectedDashboardIndexLazyRoute
+  '/dashboard/org/$orgId': typeof ProtectedDashboardOrgOrgIdIndexRoute
+  '/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ProtectedRouteWithChildren
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/forgot-password': typeof AuthForgotPasswordRoute
+  '/reset-password': typeof AuthResetPasswordRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
   '/dashboard': typeof ProtectedDashboardIndexLazyRoute
+  '/dashboard/org/$orgId': typeof ProtectedDashboardOrgOrgIdIndexRoute
+  '/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteWithChildren
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
+  '/_auth/sign-in': typeof AuthSignInRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_protected/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/_protected/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/_protected/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/_protected/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
+  '/_protected/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/_protected/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexLazyRoute
+  '/_protected/dashboard/org/$orgId/': typeof ProtectedDashboardOrgOrgIdIndexRoute
+  '/_protected/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
 
 export interface FileRouteTypes {
@@ -327,8 +392,11 @@ export interface FileRouteTypes {
     | '/dashboard/audio'
     | '/dashboard/canvas'
     | '/dashboard/chat'
+    | '/dashboard/notes'
     | '/dashboard/transcribe'
     | '/dashboard'
+    | '/dashboard/org/$orgId'
+    | '/dashboard/org/$orgId/user/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -342,43 +410,49 @@ export interface FileRouteTypes {
     | '/dashboard/audio'
     | '/dashboard/canvas'
     | '/dashboard/chat'
+    | '/dashboard/notes'
     | '/dashboard/transcribe'
     | '/dashboard'
+    | '/dashboard/org/$orgId'
+    | '/dashboard/org/$orgId/user/$userId'
   id:
     | '__root__'
     | '/'
     | '/_protected'
-    | '/forgot-password'
-    | '/reset-password'
-    | '/sign-in'
-    | '/sign-up'
+    | '/_auth/forgot-password'
+    | '/_auth/reset-password'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
     | '/demo/tanstack-query'
     | '/_protected/dashboard/account'
     | '/_protected/dashboard/audio'
     | '/_protected/dashboard/canvas'
     | '/_protected/dashboard/chat'
+    | '/_protected/dashboard/notes'
     | '/_protected/dashboard/transcribe'
     | '/_protected/dashboard/'
+    | '/_protected/dashboard/org/$orgId/'
+    | '/_protected/dashboard/org/$orgId/user/$userId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  ForgotPasswordRoute: typeof ForgotPasswordRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
-  SignInRoute: typeof SignInRoute
-  SignUpRoute: typeof SignUpRoute
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProtectedRoute: ProtectedRouteWithChildren,
-  ForgotPasswordRoute: ForgotPasswordRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
-  SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 
@@ -394,10 +468,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_protected",
-        "/forgot-password",
-        "/reset-password",
-        "/sign-in",
-        "/sign-up",
+        "/_auth/forgot-password",
+        "/_auth/reset-password",
+        "/_auth/sign-in",
+        "/_auth/sign-up",
         "/demo/tanstack-query"
       ]
     },
@@ -411,21 +485,24 @@ export const routeTree = rootRoute
         "/_protected/dashboard/audio",
         "/_protected/dashboard/canvas",
         "/_protected/dashboard/chat",
+        "/_protected/dashboard/notes",
         "/_protected/dashboard/transcribe",
-        "/_protected/dashboard/"
+        "/_protected/dashboard/",
+        "/_protected/dashboard/org/$orgId/",
+        "/_protected/dashboard/org/$orgId/user/$userId"
       ]
     },
-    "/forgot-password": {
-      "filePath": "forgot-password.tsx"
+    "/_auth/forgot-password": {
+      "filePath": "_auth/forgot-password.tsx"
     },
-    "/reset-password": {
-      "filePath": "reset-password.tsx"
+    "/_auth/reset-password": {
+      "filePath": "_auth/reset-password.tsx"
     },
-    "/sign-in": {
-      "filePath": "sign-in.tsx"
+    "/_auth/sign-in": {
+      "filePath": "_auth/sign-in.tsx"
     },
-    "/sign-up": {
-      "filePath": "sign-up.tsx"
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.tsx"
     },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
@@ -446,12 +523,24 @@ export const routeTree = rootRoute
       "filePath": "_protected/dashboard/chat.lazy.tsx",
       "parent": "/_protected"
     },
+    "/_protected/dashboard/notes": {
+      "filePath": "_protected/dashboard/notes.lazy.tsx",
+      "parent": "/_protected"
+    },
     "/_protected/dashboard/transcribe": {
       "filePath": "_protected/dashboard/transcribe.lazy.tsx",
       "parent": "/_protected"
     },
     "/_protected/dashboard/": {
       "filePath": "_protected/dashboard/index.lazy.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/dashboard/org/$orgId/": {
+      "filePath": "_protected/dashboard/org/$orgId/index.tsx",
+      "parent": "/_protected"
+    },
+    "/_protected/dashboard/org/$orgId/user/$userId": {
+      "filePath": "_protected/dashboard/org/$orgId/user/$userId.tsx",
       "parent": "/_protected"
     }
   }
