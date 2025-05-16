@@ -25,9 +25,7 @@ import { Route as ProtectedDashboardOrgOrgIdUserUserIdImport } from './routes/_p
 
 // Create Virtual Routes
 
-const ProtectedDashboardIndexLazyImport = createFileRoute(
-  '/_protected/dashboard/',
-)()
+const ProtectedDashboardLazyImport = createFileRoute('/_protected/dashboard')()
 const ProtectedDashboardTranscribeLazyImport = createFileRoute(
   '/_protected/dashboard/transcribe',
 )()
@@ -60,6 +58,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ProtectedDashboardLazyRoute = ProtectedDashboardLazyImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any).lazy(() =>
+  import('./routes/_protected/dashboard.lazy').then((d) => d.Route),
+)
+
 const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
   id: '/demo/tanstack-query',
   path: '/demo/tanstack-query',
@@ -90,20 +96,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProtectedDashboardIndexLazyRoute =
-  ProtectedDashboardIndexLazyImport.update({
-    id: '/dashboard/',
-    path: '/dashboard/',
-    getParentRoute: () => ProtectedRoute,
-  } as any).lazy(() =>
-    import('./routes/_protected/dashboard/index.lazy').then((d) => d.Route),
-  )
-
 const ProtectedDashboardTranscribeLazyRoute =
   ProtectedDashboardTranscribeLazyImport.update({
-    id: '/dashboard/transcribe',
-    path: '/dashboard/transcribe',
-    getParentRoute: () => ProtectedRoute,
+    id: '/transcribe',
+    path: '/transcribe',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any).lazy(() =>
     import('./routes/_protected/dashboard/transcribe.lazy').then(
       (d) => d.Route,
@@ -112,18 +109,18 @@ const ProtectedDashboardTranscribeLazyRoute =
 
 const ProtectedDashboardNotesLazyRoute =
   ProtectedDashboardNotesLazyImport.update({
-    id: '/dashboard/notes',
-    path: '/dashboard/notes',
-    getParentRoute: () => ProtectedRoute,
+    id: '/notes',
+    path: '/notes',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any).lazy(() =>
     import('./routes/_protected/dashboard/notes.lazy').then((d) => d.Route),
   )
 
 const ProtectedDashboardChatLazyRoute = ProtectedDashboardChatLazyImport.update(
   {
-    id: '/dashboard/chat',
-    path: '/dashboard/chat',
-    getParentRoute: () => ProtectedRoute,
+    id: '/chat',
+    path: '/chat',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any,
 ).lazy(() =>
   import('./routes/_protected/dashboard/chat.lazy').then((d) => d.Route),
@@ -131,43 +128,43 @@ const ProtectedDashboardChatLazyRoute = ProtectedDashboardChatLazyImport.update(
 
 const ProtectedDashboardCanvasLazyRoute =
   ProtectedDashboardCanvasLazyImport.update({
-    id: '/dashboard/canvas',
-    path: '/dashboard/canvas',
-    getParentRoute: () => ProtectedRoute,
+    id: '/canvas',
+    path: '/canvas',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any).lazy(() =>
     import('./routes/_protected/dashboard/canvas.lazy').then((d) => d.Route),
   )
 
 const ProtectedDashboardAudioLazyRoute =
   ProtectedDashboardAudioLazyImport.update({
-    id: '/dashboard/audio',
-    path: '/dashboard/audio',
-    getParentRoute: () => ProtectedRoute,
+    id: '/audio',
+    path: '/audio',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any).lazy(() =>
     import('./routes/_protected/dashboard/audio.lazy').then((d) => d.Route),
   )
 
 const ProtectedDashboardAccountLazyRoute =
   ProtectedDashboardAccountLazyImport.update({
-    id: '/dashboard/account',
-    path: '/dashboard/account',
-    getParentRoute: () => ProtectedRoute,
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any).lazy(() =>
     import('./routes/_protected/dashboard/account.lazy').then((d) => d.Route),
   )
 
 const ProtectedDashboardOrgOrgIdIndexRoute =
   ProtectedDashboardOrgOrgIdIndexImport.update({
-    id: '/dashboard/org/$orgId/',
-    path: '/dashboard/org/$orgId/',
-    getParentRoute: () => ProtectedRoute,
+    id: '/org/$orgId/',
+    path: '/org/$orgId/',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any)
 
 const ProtectedDashboardOrgOrgIdUserUserIdRoute =
   ProtectedDashboardOrgOrgIdUserUserIdImport.update({
-    id: '/dashboard/org/$orgId/user/$userId',
-    path: '/dashboard/org/$orgId/user/$userId',
-    getParentRoute: () => ProtectedRoute,
+    id: '/org/$orgId/user/$userId',
+    path: '/org/$orgId/user/$userId',
+    getParentRoute: () => ProtectedDashboardLazyRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -223,97 +220,110 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryImport
       parentRoute: typeof rootRoute
     }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardLazyImport
+      parentRoute: typeof ProtectedImport
+    }
     '/_protected/dashboard/account': {
       id: '/_protected/dashboard/account'
-      path: '/dashboard/account'
+      path: '/account'
       fullPath: '/dashboard/account'
       preLoaderRoute: typeof ProtectedDashboardAccountLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/audio': {
       id: '/_protected/dashboard/audio'
-      path: '/dashboard/audio'
+      path: '/audio'
       fullPath: '/dashboard/audio'
       preLoaderRoute: typeof ProtectedDashboardAudioLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/canvas': {
       id: '/_protected/dashboard/canvas'
-      path: '/dashboard/canvas'
+      path: '/canvas'
       fullPath: '/dashboard/canvas'
       preLoaderRoute: typeof ProtectedDashboardCanvasLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/chat': {
       id: '/_protected/dashboard/chat'
-      path: '/dashboard/chat'
+      path: '/chat'
       fullPath: '/dashboard/chat'
       preLoaderRoute: typeof ProtectedDashboardChatLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/notes': {
       id: '/_protected/dashboard/notes'
-      path: '/dashboard/notes'
+      path: '/notes'
       fullPath: '/dashboard/notes'
       preLoaderRoute: typeof ProtectedDashboardNotesLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/transcribe': {
       id: '/_protected/dashboard/transcribe'
-      path: '/dashboard/transcribe'
+      path: '/transcribe'
       fullPath: '/dashboard/transcribe'
       preLoaderRoute: typeof ProtectedDashboardTranscribeLazyImport
-      parentRoute: typeof ProtectedImport
-    }
-    '/_protected/dashboard/': {
-      id: '/_protected/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardIndexLazyImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/org/$orgId/': {
       id: '/_protected/dashboard/org/$orgId/'
-      path: '/dashboard/org/$orgId'
+      path: '/org/$orgId'
       fullPath: '/dashboard/org/$orgId'
       preLoaderRoute: typeof ProtectedDashboardOrgOrgIdIndexImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
     '/_protected/dashboard/org/$orgId/user/$userId': {
       id: '/_protected/dashboard/org/$orgId/user/$userId'
-      path: '/dashboard/org/$orgId/user/$userId'
+      path: '/org/$orgId/user/$userId'
       fullPath: '/dashboard/org/$orgId/user/$userId'
       preLoaderRoute: typeof ProtectedDashboardOrgOrgIdUserUserIdImport
-      parentRoute: typeof ProtectedImport
+      parentRoute: typeof ProtectedDashboardLazyImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface ProtectedRouteChildren {
+interface ProtectedDashboardLazyRouteChildren {
   ProtectedDashboardAccountLazyRoute: typeof ProtectedDashboardAccountLazyRoute
   ProtectedDashboardAudioLazyRoute: typeof ProtectedDashboardAudioLazyRoute
   ProtectedDashboardCanvasLazyRoute: typeof ProtectedDashboardCanvasLazyRoute
   ProtectedDashboardChatLazyRoute: typeof ProtectedDashboardChatLazyRoute
   ProtectedDashboardNotesLazyRoute: typeof ProtectedDashboardNotesLazyRoute
   ProtectedDashboardTranscribeLazyRoute: typeof ProtectedDashboardTranscribeLazyRoute
-  ProtectedDashboardIndexLazyRoute: typeof ProtectedDashboardIndexLazyRoute
   ProtectedDashboardOrgOrgIdIndexRoute: typeof ProtectedDashboardOrgOrgIdIndexRoute
   ProtectedDashboardOrgOrgIdUserUserIdRoute: typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
 
+const ProtectedDashboardLazyRouteChildren: ProtectedDashboardLazyRouteChildren =
+  {
+    ProtectedDashboardAccountLazyRoute: ProtectedDashboardAccountLazyRoute,
+    ProtectedDashboardAudioLazyRoute: ProtectedDashboardAudioLazyRoute,
+    ProtectedDashboardCanvasLazyRoute: ProtectedDashboardCanvasLazyRoute,
+    ProtectedDashboardChatLazyRoute: ProtectedDashboardChatLazyRoute,
+    ProtectedDashboardNotesLazyRoute: ProtectedDashboardNotesLazyRoute,
+    ProtectedDashboardTranscribeLazyRoute:
+      ProtectedDashboardTranscribeLazyRoute,
+    ProtectedDashboardOrgOrgIdIndexRoute: ProtectedDashboardOrgOrgIdIndexRoute,
+    ProtectedDashboardOrgOrgIdUserUserIdRoute:
+      ProtectedDashboardOrgOrgIdUserUserIdRoute,
+  }
+
+const ProtectedDashboardLazyRouteWithChildren =
+  ProtectedDashboardLazyRoute._addFileChildren(
+    ProtectedDashboardLazyRouteChildren,
+  )
+
+interface ProtectedRouteChildren {
+  ProtectedDashboardLazyRoute: typeof ProtectedDashboardLazyRouteWithChildren
+}
+
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedDashboardAccountLazyRoute: ProtectedDashboardAccountLazyRoute,
-  ProtectedDashboardAudioLazyRoute: ProtectedDashboardAudioLazyRoute,
-  ProtectedDashboardCanvasLazyRoute: ProtectedDashboardCanvasLazyRoute,
-  ProtectedDashboardChatLazyRoute: ProtectedDashboardChatLazyRoute,
-  ProtectedDashboardNotesLazyRoute: ProtectedDashboardNotesLazyRoute,
-  ProtectedDashboardTranscribeLazyRoute: ProtectedDashboardTranscribeLazyRoute,
-  ProtectedDashboardIndexLazyRoute: ProtectedDashboardIndexLazyRoute,
-  ProtectedDashboardOrgOrgIdIndexRoute: ProtectedDashboardOrgOrgIdIndexRoute,
-  ProtectedDashboardOrgOrgIdUserUserIdRoute:
-    ProtectedDashboardOrgOrgIdUserUserIdRoute,
+  ProtectedDashboardLazyRoute: ProtectedDashboardLazyRouteWithChildren,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
@@ -328,13 +338,13 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard': typeof ProtectedDashboardLazyRouteWithChildren
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
-  '/dashboard': typeof ProtectedDashboardIndexLazyRoute
   '/dashboard/org/$orgId': typeof ProtectedDashboardOrgOrgIdIndexRoute
   '/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
@@ -347,13 +357,13 @@ export interface FileRoutesByTo {
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard': typeof ProtectedDashboardLazyRouteWithChildren
   '/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
-  '/dashboard': typeof ProtectedDashboardIndexLazyRoute
   '/dashboard/org/$orgId': typeof ProtectedDashboardOrgOrgIdIndexRoute
   '/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
@@ -367,13 +377,13 @@ export interface FileRoutesById {
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/_protected/dashboard': typeof ProtectedDashboardLazyRouteWithChildren
   '/_protected/dashboard/account': typeof ProtectedDashboardAccountLazyRoute
   '/_protected/dashboard/audio': typeof ProtectedDashboardAudioLazyRoute
   '/_protected/dashboard/canvas': typeof ProtectedDashboardCanvasLazyRoute
   '/_protected/dashboard/chat': typeof ProtectedDashboardChatLazyRoute
   '/_protected/dashboard/notes': typeof ProtectedDashboardNotesLazyRoute
   '/_protected/dashboard/transcribe': typeof ProtectedDashboardTranscribeLazyRoute
-  '/_protected/dashboard/': typeof ProtectedDashboardIndexLazyRoute
   '/_protected/dashboard/org/$orgId/': typeof ProtectedDashboardOrgOrgIdIndexRoute
   '/_protected/dashboard/org/$orgId/user/$userId': typeof ProtectedDashboardOrgOrgIdUserUserIdRoute
 }
@@ -388,13 +398,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/demo/tanstack-query'
+    | '/dashboard'
     | '/dashboard/account'
     | '/dashboard/audio'
     | '/dashboard/canvas'
     | '/dashboard/chat'
     | '/dashboard/notes'
     | '/dashboard/transcribe'
-    | '/dashboard'
     | '/dashboard/org/$orgId'
     | '/dashboard/org/$orgId/user/$userId'
   fileRoutesByTo: FileRoutesByTo
@@ -406,13 +416,13 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/demo/tanstack-query'
+    | '/dashboard'
     | '/dashboard/account'
     | '/dashboard/audio'
     | '/dashboard/canvas'
     | '/dashboard/chat'
     | '/dashboard/notes'
     | '/dashboard/transcribe'
-    | '/dashboard'
     | '/dashboard/org/$orgId'
     | '/dashboard/org/$orgId/user/$userId'
   id:
@@ -424,13 +434,13 @@ export interface FileRouteTypes {
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/demo/tanstack-query'
+    | '/_protected/dashboard'
     | '/_protected/dashboard/account'
     | '/_protected/dashboard/audio'
     | '/_protected/dashboard/canvas'
     | '/_protected/dashboard/chat'
     | '/_protected/dashboard/notes'
     | '/_protected/dashboard/transcribe'
-    | '/_protected/dashboard/'
     | '/_protected/dashboard/org/$orgId/'
     | '/_protected/dashboard/org/$orgId/user/$userId'
   fileRoutesById: FileRoutesById
@@ -481,15 +491,7 @@ export const routeTree = rootRoute
     "/_protected": {
       "filePath": "_protected.tsx",
       "children": [
-        "/_protected/dashboard/account",
-        "/_protected/dashboard/audio",
-        "/_protected/dashboard/canvas",
-        "/_protected/dashboard/chat",
-        "/_protected/dashboard/notes",
-        "/_protected/dashboard/transcribe",
-        "/_protected/dashboard/",
-        "/_protected/dashboard/org/$orgId/",
-        "/_protected/dashboard/org/$orgId/user/$userId"
+        "/_protected/dashboard"
       ]
     },
     "/_auth/forgot-password": {
@@ -507,41 +509,51 @@ export const routeTree = rootRoute
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
     },
+    "/_protected/dashboard": {
+      "filePath": "_protected/dashboard.lazy.tsx",
+      "parent": "/_protected",
+      "children": [
+        "/_protected/dashboard/account",
+        "/_protected/dashboard/audio",
+        "/_protected/dashboard/canvas",
+        "/_protected/dashboard/chat",
+        "/_protected/dashboard/notes",
+        "/_protected/dashboard/transcribe",
+        "/_protected/dashboard/org/$orgId/",
+        "/_protected/dashboard/org/$orgId/user/$userId"
+      ]
+    },
     "/_protected/dashboard/account": {
       "filePath": "_protected/dashboard/account.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/audio": {
       "filePath": "_protected/dashboard/audio.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/canvas": {
       "filePath": "_protected/dashboard/canvas.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/chat": {
       "filePath": "_protected/dashboard/chat.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/notes": {
       "filePath": "_protected/dashboard/notes.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/transcribe": {
       "filePath": "_protected/dashboard/transcribe.lazy.tsx",
-      "parent": "/_protected"
-    },
-    "/_protected/dashboard/": {
-      "filePath": "_protected/dashboard/index.lazy.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/org/$orgId/": {
       "filePath": "_protected/dashboard/org/$orgId/index.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     },
     "/_protected/dashboard/org/$orgId/user/$userId": {
       "filePath": "_protected/dashboard/org/$orgId/user/$userId.tsx",
-      "parent": "/_protected"
+      "parent": "/_protected/dashboard"
     }
   }
 }

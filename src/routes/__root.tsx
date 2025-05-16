@@ -34,18 +34,11 @@ const AnonBanner = () => {
 };
 
 const RootComponent = () => {
-  const location = useLocation()
-  const isDashboardRoute = location.pathname.startsWith('/dashboard')
-
   return (
     <div className="h-screen flex flex-col">
-      {
-        isDashboardRoute ? <DashboardHeader /> : <Header />
-      }
-
       <Outlet />
-      <TanStackRouterDevtools />
 
+      {/*<TanStackRouterDevtools />*/}
       <TanstackQueryLayout />
     </div>
   );

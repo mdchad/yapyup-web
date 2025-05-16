@@ -38,6 +38,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "@/routeTree.gen.ts";
 import { useEffect } from "react";
 import {useAuthContext} from "@/lib/auth/use-auth-context";
+import {useOrgContext} from "@/lib/auth/org-provider";
 
 const router = createRouter({
   routeTree,
@@ -60,11 +61,12 @@ declare module "@tanstack/react-router" {
 
 export const App = () => {
   const auth = useAuthContext();
+  const org = useOrgContext()
 
   useEffect(() => {
     router.invalidate();
   }, [auth.isAuthenticated]);
 
-  return <RouterProvider router={router} context={{ auth }} />;
+  return <RouterProvider router={router} context={{ auth, org }} />;
 };
 

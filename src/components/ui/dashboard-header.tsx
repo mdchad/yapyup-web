@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAuthContext } from '@/lib/auth/use-auth-context'
 import { supabase } from '@/lib/supabase/client'
+import {SidebarTrigger} from "@/components/ui/sidebar";
+import {LogoutIcon} from "@/components/ui/logout";
 
 type Organisation = {
   organisation_id: string
@@ -74,6 +76,7 @@ const DashboardHeader = () => {
         <div className="flex items-center space-x-2">
           {/* Organization logo and dropdown */}
           <div className="flex items-center">
+            <SidebarTrigger />
             {/*<Avatar className="h-8 w-8 mr-2 bg-gray-800 text-white">*/}
             {/*  <AvatarFallback>P</AvatarFallback>*/}
             {/*</Avatar>*/}
@@ -140,7 +143,8 @@ const DashboardHeader = () => {
           </nav>
 
           <Button variant="ghost" size="icon" className="text-gray-500" onClick={handleSignOut}>
-            <LogOutIcon className="h-5 w-5" />
+            <LogoutIcon />
+            {/*<LogOutIcon className="h-5 w-5" />*/}
           </Button>
 
           <Avatar className="h-8 w-8 bg-indigo-600 text-white">

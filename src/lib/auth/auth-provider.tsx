@@ -7,6 +7,7 @@ type AuthenticatedUser = {
   email?: string;
   token: string;
   displayName: string;
+  organisationId: string;
 };
 
 
@@ -21,10 +22,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email: session.user.email,
         token: session.access_token,
         displayName: session.user.email || "Anonymous",
+        organisationId: session.user?.app_metadata?.tenant_id
       },
     );
 
-    console.log(session)
     const _isAuthenticated = !!session;
 
     setIsAuthenticated(_isAuthenticated);

@@ -5,6 +5,7 @@ type AuthenticatedUser = {
   email?: string;
   token: string;
   displayName: string;
+  organisationId: string;
 };
 
 export interface AuthContextType {

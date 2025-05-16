@@ -53,23 +53,24 @@
 // // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals()
 
-
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./styles.css";
-import {AuthProvider} from "@/lib/auth/auth-provider";
-import {App} from "@/app";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './styles.css'
+import { AuthProvider } from '@/lib/auth/auth-provider'
+import { App } from '@/app'
 import * as TanstackQuery from './integrations/tanstack-query/root-provider'
-import {Toaster} from "@/components/ui/sonner";
+import { Toaster } from '@/components/ui/sonner'
+import { OrgProvider } from '@/lib/auth/org-provider'
 
-
-createRoot(document.getElementById("app")!).render(
+createRoot(document.getElementById('app')!).render(
   // <StrictMode>
   <TanstackQuery.Provider>
     <AuthProvider>
-      <App />
-      <Toaster />
+      <OrgProvider>
+        <App />
+        <Toaster />
+      </OrgProvider>
     </AuthProvider>
-  </TanstackQuery.Provider>
+  </TanstackQuery.Provider>,
   // </StrictMode>,
-);
+)
