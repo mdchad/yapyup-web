@@ -164,8 +164,8 @@ function RouteComponent() {
           <CardContent>
             {membersLoading ? (
               <div className="space-y-2">
-                {[...Array(5)].map((_, i) => (
-                  <div className="flex space-x-4" key={i}>
+                {[...Array(2)].map((_, i) => (
+                  <div className="flex space-x-8" key={i}>
                     <Skeleton className="h-6 w-1/4" />
                     <Skeleton className="h-6 w-1/4" />
                     <Skeleton className="h-6 w-1/4" />

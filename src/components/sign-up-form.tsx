@@ -32,16 +32,21 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
     setIsLoading(true)
 
     try {
+      // Insert organisation after successful sign up
+      const { error: orgError, data: orgData } = await supabase.from('organisations').insert([
+        { name: workspaceName }
+      ])
+
+      if (orgError) throw orgError
+
       const { error: signUpError, data: signUpData } = await supabase.auth.signUp({
         email,
         password,
+        user_metadata: { name },
+        app_metadata: { tenant_id: orgData.id}
+        //@TODO: ADD tenant_id
       })
       if (signUpError) throw signUpError
-      // Insert organisation after successful sign up
-      const { error: orgError } = await supabase.from('organisations').insert([
-        { name: workspaceName }
-      ])
-      if (orgError) throw orgError
       setSuccess(true)
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
