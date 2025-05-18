@@ -1,47 +1,76 @@
-import {Calendar, ChevronDown, ChevronUp, Home, Inbox, Search, Settings, User2} from "lucide-react"
+import {
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  User2,
+} from 'lucide-react'
 
 import {
   Sidebar,
-  SidebarContent, SidebarFooter,
+  SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel, SidebarHeader,
+  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import {DropdownMenuContent, DropdownMenuItem} from "@/components/ui/dropdown-menu";
-import {DropdownMenu, DropdownMenuTrigger} from "@radix-ui/react-dropdown-menu";
-import {useOrgContext} from "@/lib/auth/org-provider";
-import {Link} from "@tanstack/react-router";
-import {useAuthContext} from "@/lib/auth/use-auth-context";
-import {Collapsible, CollapsibleContent, CollapsibleTrigger} from "@/components/ui/collapsible";
+} from '@/components/ui/sidebar'
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+} from '@radix-ui/react-dropdown-menu'
+import { useOrgContext } from '@/lib/auth/org-provider'
+import { Link } from '@tanstack/react-router'
+import { useAuthContext } from '@/lib/auth/use-auth-context'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { Button } from '@/components/ui/button'
+import { LogoutIcon } from '@/components/ui/logout'
+import { useRef } from 'react'
+import { supabase } from '@/lib/supabase/client'
+import { UserIcon } from '@/components/ui/user'
+import { ChevronUpIcon } from '@/components/ui/chevron-up'
+import { LayersIcon } from '@/components/ui/layers'
+import {Avatar, AvatarFallback} from "@/components/ui/avatar";
 
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
+    title: 'Home',
+    url: '#',
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
+    title: 'Inbox',
+    url: '#',
     icon: Inbox,
   },
   {
-    title: "Calendar",
-    url: "#",
+    title: 'Calendar',
+    url: '#',
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "#",
+    title: 'Search',
+    url: '#',
     icon: Search,
   },
   {
-    title: "Settings",
-    url: "#",
+    title: 'Settings',
+    url: '#',
     icon: Settings,
   },
 ]
@@ -49,7 +78,13 @@ const items = [
 export function AppSidebar() {
   const { organisation } = useOrgContext()
   const { user } = useAuthContext()
-  console.log(user)
+
+  const iconRef = useRef(null)
+  const layersIconRef = useRef(null)
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -58,7 +93,12 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="font-medium border border-gray-200 p-4">
+                <SidebarMenuButton
+                  className="font-medium border border-gray-200 py-4 px-2"
+                  onMouseEnter={() => layersIconRef.current?.startAnimation()}
+                  onMouseLeave={() => layersIconRef.current?.stopAnimation()}
+                >
+                  <LayersIcon size={16} ref={layersIconRef} />
                   {organisation?.name}
                   <ChevronDown className="ml-auto" />
                 </SidebarMenuButton>
@@ -112,9 +152,21 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> {user.email}
-                  <ChevronUp className="ml-auto" />
+                <SidebarMenuButton
+                  className="py-6 cursor-pointer"
+                  onMouseEnter={() => iconRef.current?.startAnimation()}
+                  onMouseLeave={() => iconRef.current?.stopAnimation()}
+                >
+                  {/*<User2 />*/}
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  {/*<ChevronUpIcon*/}
+                  {/*  size={18}*/}
+                  {/*  ref={iconRef}*/}
+                  {/*  className="text-gray-500"*/}
+                  {/*/>*/}
+                  <span className="truncate text-xs">{user.email}</span>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -127,7 +179,7 @@ export function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Billing</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleSignOut}>
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

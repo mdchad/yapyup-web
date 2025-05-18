@@ -15,7 +15,7 @@ export const Route = createFileRoute(
   '/_protected/dashboard/org/$orgId/user/$userId',
 )({
   component: RouteComponent,
-  loader: async ({ params }) => {
+  loader: async ({ params, context }) => {
     const { data: user, error: usersError } = await supabase
       .from('users')
       .select(
@@ -45,8 +45,6 @@ function RouteComponent() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(currentUser.user_id)
-    console.log(currentUser.organisation_id)
   }
 
   function handleChange() {}

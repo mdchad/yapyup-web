@@ -1,8 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient({
+  experimental_prefetchInRender: true,
   defaultOptions: {
+    experimental_prefetchInRender: true,
     queries: {
+      experimental_prefetchInRender: true,
       refetchOnWindowFocus: false,
       staleTime: Infinity,
       gcTime: Infinity,

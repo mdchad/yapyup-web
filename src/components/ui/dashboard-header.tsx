@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import {ChevronDown, LogOutIcon, Menu, Search, Settings} from 'lucide-react'
-import { useEffect, useState } from 'react'
+import {useEffect, useRef, useState} from 'react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
@@ -48,6 +48,7 @@ const DashboardHeader = () => {
   const { user } = useAuthContext()
   const [org, setOrg] = useState<Organisation | null>(null)
   const [loading, setLoading] = useState(true)
+  const iconRef = useRef(null);
 
   useEffect(() => {
     const fetchOrganisation = async () => {
@@ -142,14 +143,9 @@ const DashboardHeader = () => {
             })}
           </nav>
 
-          <Button variant="ghost" size="icon" className="text-gray-500" onClick={handleSignOut}>
-            <LogoutIcon />
-            {/*<LogOutIcon className="h-5 w-5" />*/}
-          </Button>
-
-          <Avatar className="h-8 w-8 bg-indigo-600 text-white">
-            <AvatarFallback>M</AvatarFallback>
-          </Avatar>
+          {/*<Avatar className="h-8 w-8 bg-indigo-600 text-white">*/}
+          {/*  <AvatarFallback>M</AvatarFallback>*/}
+          {/*</Avatar>*/}
         </div>
       </div>
 
